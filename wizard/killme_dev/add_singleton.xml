@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<odoo>
+  <data>
+    <record id="view_form_singleton_clocking" model="ir.ui.view">
+      <field name="name">Add Singleton Clocking Wizard</field>
+      <field name="model">thingsintouch.attendance.addsingleton</field>
+      <field name="view_type">form</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="employee_id"/>
+            <field name="clocking_to_add_or_delete" />
+          </group>
+          <footer>
+            <button type="object"
+              name="button_add_clocking"
+              string="Add Clocking"
+            />
+            <button type="object"
+              name="button_delete_clocking"
+              string="Delete Clocking"
+            />
+
+            <button special="cancel"
+              string="Cancel"
+              class="btn-secondary" />
+          </footer>
+        </form>
+      </field>
+    </record>
+
+
+
+
+        <record id="action_add_singleton_clocking" model="ir.actions.act_window">
+            <field name="name">Add Singleton Clocking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.attendance</field>
+            <field name="context">
+              {'search_default_employee_id': active_id, 'default_employee_id': active_id}
+            </field>
+            <!-- <field name="src_model">hr.attendance</field>             -->
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem action="action_add_singleton_clocking"
+                  id="menu_wizard_singleton_clocking"
+                  parent="hr.menu_hr_root"/>
+  </data>       
+</odoo>
+
+
+<!-- <act_window id="action_add_singleton_clocking"
+  name="Add Singleton Clocking"
+  src_model="hr.employee"
+  res_model="thingsintouch.attendance.addsingleton"
+  view_type="form"
+  view_mode="form"
+  target="new"
+  multi="True"
+  /> -->
