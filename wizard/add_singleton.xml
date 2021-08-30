@@ -13,18 +13,17 @@
           </group>
           <group>
             <field name="clocking_to_add_or_delete" />
-            <field name="checkin_or_checkout" />
+            <!-- <field name="checkin_or_checkout" /> -->
           </group>
           <footer>
             <button type="object"
               name="button_add_clocking"
               string="Add Clocking"
             />
-            <button type="object"
+            <!-- <button type="object"
               name="button_delete_clocking"
               string="Delete Clocking"
-            />
-
+            /> -->
             <button special="cancel"
               string="Cancel"
               class="btn-secondary" />
@@ -33,50 +32,18 @@
       </field>
     </record>
 
+    <act_window id="action_singleton_clocking"
+      name="Singleton Clocking"
+      src_model="hr.employee"
+      res_model="hr.employee.singletonclocking"
+      view_type="form"
+      view_mode="form"
+      target="new"
+      />
 
+    <menuitem action="action_singleton_clocking"
+              id="menu_wizard_singleton_clocking"
+              parent="hr.menu_hr_root"/>
 
-
-        <!-- <record id="action_singleton_clocking" model="ir.actions.act_window">
-            <field name="name">Singleton Clocking</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">hr.employee</field>
-            <field name="src_model">hr.employee</field>
-            <field name="context">
-              {'search_default_employee_id': active_id, 'default_employee_id': active_id}
-            </field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-        </record> -->
-
-      <act_window id="action_singleton_clocking"
-        name="Singleton Clocking"
-        src_model="hr.employee"
-        res_model="hr.employee.singletonclocking"
-        view_type="form"
-        view_mode="form"
-        target="new"
-        />
-
-        <!-- 
-                  context="{
-            'default_employee_id': default_employee_id,
-            }"
-multi="True" -->
-
-        <menuitem action="action_singleton_clocking"
-                  id="menu_wizard_singleton_clocking"
-                  parent="hr.menu_hr_root"/>
   </data>       
 </odoo>
-
-
-<!-- <act_window id="action_add_singleton_clocking"
-  name="Add Singleton Clocking"
-  src_model="hr.employee"
-  res_model="thingsintouch.attendance.addsingleton"
-  view_type="form"
-  view_mode="form"
-  target="new"
-  multi="True"
-  /> -->

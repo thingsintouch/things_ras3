@@ -25,33 +25,34 @@ class attendanceHelpers():
     def __init__(self,  attendanceModel,
                         employee_id, 
                         timestamp, 
-                        checkin_or_checkout, 
+                        #checkin_or_checkout, 
                         source):
 
         self.attendanceModel = attendanceModel
         self.employee_id = employee_id
         self.timestamp = timestamp
         self.timestamp_dt = datetime.strptime(timestamp, DATETIME_FORMAT)
-        self.checkin_or_checkout = checkin_or_checkout
+        #self.checkin_or_checkout = checkin_or_checkout
         self.source = source or defaultClockingSource # in which device RAS2 (for example) was the clocking issued
         self.howManyDaysAllowedToChange = howManyDaysAllowedToChange
         self.warningMessage = None
         self.defaultClockingSource = defaultClockingSource
         self.maxAllowedWorkingHours = maxAllowedWorkingHours
 
-        self.logging_at_the_beginning()
+        #self.logging_at_the_beginning()
         if self.are_input_parameters_valid():
             while self.timestamp is not None:
                 self.registerClocking()
 
     def logging_at_the_beginning(self):
-        _logger.info(OKBLUE+'this is in hr_attendance---- info:'+ENDC)
-        _logger.debug(OKBLUE+"self is:  %s "+ENDC, self )
-        #_logger.debug(OKBLUE+"self.env.context is:  %s "+ENDC, self.env.context )
-        _logger.debug(OKBLUE+"employee_id is:  %s "+ENDC, self.employee_id)
-        #_logger.debug(OKBLUE+"employee name is:  %s "+ENDC, self.employee_id.name)
-        _logger.debug(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, self.checkin_or_checkout)
-        _logger.debug(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC, self.timestamp)
+        # _logger.info(OKBLUE+'this is in hr_attendance---- info:'+ENDC)
+        # _logger.debug(OKBLUE+"self is:  %s "+ENDC, self )
+        # #_logger.debug(OKBLUE+"self.env.context is:  %s "+ENDC, self.env.context )
+        # _logger.debug(OKBLUE+"employee_id is:  %s "+ENDC, self.employee_id)
+        # #_logger.debug(OKBLUE+"employee name is:  %s "+ENDC, self.employee_id.name)
+        # _logger.debug(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, self.checkin_or_checkout)
+        # _logger.debug(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC, self.timestamp)
+        pass
         
     def is_timestamp_in_the_future(self):
         return self.timestamp > fields.Datetime.now()
@@ -82,15 +83,15 @@ class attendanceHelpers():
         #     return True
         return False
 
-    def is_checkin_or_checkout_variable_not_valid(self):
-        return self.checkin_or_checkout not in ["check_in", "check_out", "not_defined"]
+    # def is_checkin_or_checkout_variable_not_valid(self):
+    #     return self.checkin_or_checkout not in ["check_in", "check_out", "not_defined"]
 
     def are_input_parameters_valid(self):
 
-        if self.is_checkin_or_checkout_variable_not_valid():
-            self.warningMessage =  "Could not add the clocking.\n"+ \
-                    "Please specify Check-In or Check-Out Input in a valid format." 
-            return False           
+        # if self.is_checkin_or_checkout_variable_not_valid():
+        #     self.warningMessage =  "Could not add the clocking.\n"+ \
+        #             "Please specify Check-In or Check-Out Input in a valid format." 
+        #     return False           
 
         if self.is_clocking_source_not_valid():
             self.warningMessage =  "Could not add the clocking.\n"+ \
@@ -246,7 +247,7 @@ class attendanceHelpers():
             else:
                 move_new_timestamp_to_CI_and_old_CI_to_CO()    
                 self.prepare_exit_register_clocking_process()
-                             
+
         _logger.debug(f"self.NCI.check_in: {self.NCI.check_in}-  self.timestamp: {self.timestamp}")
         if  self.maxAllowedWorkingHoursNotReached(self.NCI.check_in, self.timestamp):
             move_check_in_of_NCI_to_the_check_out()

@@ -53,52 +53,25 @@ class HrAttendance(models.Model):
                     'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(attendance.check_in))),
                 })
 
-            #   # if not attendance.check_out:
-                #     # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
-                #     no_check_out_attendances = self.env['hr.attendance'].search([
-                #         ('employee_id', '=', attendance.employee_id.id),
-                #         ('check_out', '=', False),
-                #         ('id', '!=', attendance.id),
-                #     ], order='check_in desc', limit=1)
-                #     if no_check_out_attendances:
-                #         raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee hasn't checked out since %(datetime)s") % {
-                #             'empl_name': attendance.employee_id.name,
-                #             'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(no_check_out_attendances.check_in))),
-                #         })
-                # else:
-                #     # we verify that the latest attendance with check_in time before our check_out time
-                #     # is the same as the one before our check_in time computed before, otherwise it overlaps
-                #     last_attendance_before_check_out = self.env['hr.attendance'].search([
-                #         ('employee_id', '=', attendance.employee_id.id),
-                #         ('check_in', '<', attendance.check_out),
-                #         ('id', '!=', attendance.id),
-                #     ], order='check_in desc', limit=1)
-                #     if last_attendance_before_check_out and last_attendance_before_check_in != last_attendance_before_check_out:
-                #         raise exceptions.ValidationError(_("Cannot create new attendance record for %(empl_name)s, the employee was already checked in on %(datetime)s") % {
-                #             'empl_name': attendance.employee_id.name,
-                #             'datetime': fields.Datetime.to_string(fields.Datetime.context_timestamp(self, fields.Datetime.from_string(last_attendance_before_check_out.check_in))),
-                #         })
 
     @api.multi
     def add_clocking(   self,
                         employee_id,
                         timestamp, 
-                        checkin_or_checkout="not_defined", 
+                        #checkin_or_checkout="not_defined", 
                         source=h.defaultClockingSource):
-        _logger.info(OKBLUE+"self.context is:  %s "+ENDC, self.env.context)
-        _logger.info(OKBLUE+"employee_id is:  %s "+ENDC, employee_id)
-        _logger.info(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC,
-                        timestamp)
-        _logger.info(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, checkin_or_checkout)   
-        _logger.info(OKBLUE+"source is:  %s "+ENDC, source)     
+        # _logger.info(OKBLUE+"self.context is:  %s "+ENDC, self.env.context)
+        # _logger.info(OKBLUE+"employee_id is:  %s "+ENDC, employee_id)
+        # _logger.info(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC,
+        #                 timestamp)
+        # _logger.info(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, checkin_or_checkout)   
+        # _logger.info(OKBLUE+"source is:  %s "+ENDC, source)     
         helper = h.attendanceHelpers(self.env['hr.attendance'],
                                     employee_id.id, 
                                     timestamp, 
-                                    checkin_or_checkout, 
+                                    #checkin_or_checkout, 
                                     source)
 
-        #helper.logging_at_the_beginning()
-        
         if helper.warningMessage: return helper.warningMessage
 
         
