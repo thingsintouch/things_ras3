@@ -27,11 +27,9 @@ class HrAttendance(models.Model):
 
     check_in_source = fields.Char(  string="Source of the Check-In TimeStamp", 
                                     default=h.defaultClockingSource, 
-                                    size=3,
                                     required=True)
     check_out_source = fields.Char( string="Source of the Check-Out TimeStamp", 
-                                    default=h.defaultClockingSource, 
-                                    size=3,
+                                    default=h.defaultClockingSource,
                                     required=True)
 
     @api.constrains('check_in', 'check_out', 'employee_id')
@@ -94,7 +92,7 @@ class HrAttendance(models.Model):
         _logger.info(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, checkin_or_checkout)   
         _logger.info(OKBLUE+"source is:  %s "+ENDC, source)     
         helper = h.attendanceHelpers(self.env['hr.attendance'],
-                                    employee_id, 
+                                    employee_id.id, 
                                     timestamp, 
                                     checkin_or_checkout, 
                                     source)
