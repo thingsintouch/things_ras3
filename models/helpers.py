@@ -237,7 +237,7 @@ class attendanceHelpers():
             self.NCI.check_out_source   = self.temp_source
 
         def move_check_in_of_NCI_to_the_check_out():
-            _logger.debug(OKCYAN+"in move_check_in_of_NCI_to_the_check_out()"+ENDC)
+            #_logger.debug(OKCYAN+"in move_check_in_of_NCI_to_the_check_out()"+ENDC)
             if self.NCI.check_out:
                 self.to_relocate__timestamp = self.NCI.check_out
                 self.to_relocate__source    =  self.NCI.check_out_source
@@ -248,7 +248,7 @@ class attendanceHelpers():
                 move_new_timestamp_to_CI_and_old_CI_to_CO()    
                 self.prepare_exit_register_clocking_process()
 
-        _logger.debug(f"self.NCI.check_in: {self.NCI.check_in}-  self.timestamp: {self.timestamp}")
+        #_logger.debug(f"self.NCI.check_in: {self.NCI.check_in}-  self.timestamp: {self.timestamp}")
         if  self.maxAllowedWorkingHoursNotReached(self.NCI.check_in, self.timestamp):
             move_check_in_of_NCI_to_the_check_out()
             return True
@@ -326,7 +326,7 @@ class attendanceHelpers():
         timestamp_1_dt = datetime.strptime(timestamp_1, DATETIME_FORMAT)
         timestamp_2_dt = datetime.strptime(timestamp_2, DATETIME_FORMAT)
         differenceInHours = abs(timestamp_1_dt - timestamp_2_dt).total_seconds()/3600
-        _logger.debug(OKCYAN+"delta is:  %s "+ENDC, differenceInHours)
+        #_logger.debug(OKCYAN+"delta is:  %s "+ENDC, differenceInHours)
         return  (differenceInHours < self.maxAllowedWorkingHours)
 
 
@@ -342,4 +342,5 @@ class attendanceHelpers():
     def list_all_attendances(self):
         listOfAllAttendances = self.attendanceModel.sudo().search([])
         for attendance in listOfAllAttendances:
-            _logger.debug(OKCYAN+"+++++++ attendance is:  %s "+ENDC, attendance) 
+            #_logger.debug(OKCYAN+"+++++++ attendance is:  %s "+ENDC, attendance)
+            pass

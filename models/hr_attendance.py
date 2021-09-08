@@ -79,8 +79,8 @@ class HrAttendance(models.Model):
         #return "Could not add the clocking."
 
 
-    @api.multi
-    def delete_clocking(self):
-        _logger.info( 'this is info:'+WARNING+ 'Button DELETE_timestamp works like a charm'+ENDC)
-        _logger.debug( 'this is debug debug')
-        _logger.debug(OKBLUE+"self.context is:  %s "+ENDC, self.env.context ) 
+    # @api.multi
+    # def delete_clocking(self):
+    #     _logger.info( 'this is info:'+WARNING+ 'Button DELETE_timestamp works like a charm'+ENDC)
+    #     _logger.debug( 'this is debug debug')
+    #     _logger.debug(OKBLUE+"self.context is:  %s "+ENDC, self.env.context ) 

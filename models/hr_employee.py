@@ -88,7 +88,7 @@ class HrEmployee(models.Model):
             res['employee_id'] = employee.id
         else:
             msg = _("No employee found with card %s") % card_code
-            _logger.warning(msg)
+            #_logger.warning(msg)
             res['error_message'] = msg
             return res
         try:
@@ -96,7 +96,7 @@ class HrEmployee(models.Model):
             print("in register_attendance - attendance: ", attendance)
             if attendance:
                 msg = _('Attendance recorded for employee %s') % employee.name
-                _logger.debug(msg)
+                #_logger.debug(msg)
                 res['logged'] = True
                 if attendance.check_out:
                     res['action'] = 'check_out'
@@ -107,7 +107,7 @@ class HrEmployee(models.Model):
             else:
                 msg = _('No attendance was recorded for '
                         'employee %s') % employee.name
-                _logger.error(msg)
+                #_logger.error(msg)
                 res['error_message'] = msg
                 return res
         except Exception as e:
@@ -217,7 +217,7 @@ class HrEmployee(models.Model):
 
         # json_rfid_codes_with_names = json.dumps(answer)    
         # _logger.debug(f'json_rfid_codes_with_names {json_rfid_codes_with_names} ')
-        _logger.debug(f'answer get_rfid_codes_with_names {answer} ')
+        #_logger.debug(f'answer get_rfid_codes_with_names {answer} ')
 
         return answer
 
