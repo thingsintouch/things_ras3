@@ -20,6 +20,7 @@
     'application': False,
     'installable': True,
     'depends': [
+        'hr_attendance',
         'things_gateway',
     ],
     'data': [
