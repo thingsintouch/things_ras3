@@ -1,3 +1,5 @@
+# Copyright 2017 Comunitea Servicios Tecnológicos S.L.
+# Copyright 2018 Eficent Business and IT Consulting Services, S.L.
 # Copyright 2021 thingsintouch.com
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
