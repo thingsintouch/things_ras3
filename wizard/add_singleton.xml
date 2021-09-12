@@ -40,6 +40,8 @@
       parent="hr.menu_hr_root"
       id="menu_wizard_singleton_clocking"
       action="action_singleton_clocking"
+      sequence="10"
+      groups=""
     />
 
 </odoo>
