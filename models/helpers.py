@@ -162,7 +162,7 @@ class attendanceHelpers():
             self.PCO = False
             self.NCO = False
 
-        # _logger.debug(f"self.attendances_sorted  {self.attendances_sorted} ")
+        # _logger.debug("self.attendances_sorted  {}".format(self.attendances_sorted))
         self.previousCheckIn_AttendanceRecord = self.PCI
         self.previousCheckOut_AttendanceRecord = self.PCO
         self.nextCheckIn_AttendanceRecord = self.NCI
@@ -248,7 +248,7 @@ class attendanceHelpers():
                 move_new_timestamp_to_CI_and_old_CI_to_CO()    
                 self.prepare_exit_register_clocking_process()
 
-        #_logger.debug(f"self.NCI.check_in: {self.NCI.check_in}-  self.timestamp: {self.timestamp}")
+        #_logger.debug("self.NCI.check_in: {}-  self.timestamp: {}".format(self.NCI.check_in, self.timestamp))
         if  self.maxAllowedWorkingHoursNotReached(self.NCI.check_in, self.timestamp):
             move_check_in_of_NCI_to_the_check_out()
             return True

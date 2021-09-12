@@ -215,8 +215,8 @@ class HrEmployee(models.Model):
                 answer['rfid_codes_to_names'][employee.rfid_card_code] = employee.name
 
         # json_rfid_codes_with_names = json.dumps(answer)    
-        # _logger.debug(f'json_rfid_codes_with_names {json_rfid_codes_with_names} ')
-        #_logger.debug(f'answer get_rfid_codes_with_names {answer} ')
+        # _logger.debug('json_rfid_codes_with_names {}'.format(json_rfid_codes_with_names))
+        #_logger.debug('answer get_rfid_codes_with_names {}'.format(answer))
 
         return answer
 
