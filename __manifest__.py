@@ -20,7 +20,6 @@
     'application': False,
     'installable': True,
     'depends': [
-        'hr_attendance_rfid',
         'things_gateway',
     ],
     'data': [
