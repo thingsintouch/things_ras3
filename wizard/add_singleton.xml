@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
-  <data>
+
     <record id="view_form_singleton_clocking" model="ir.ui.view">
       <field name="name">Add Singleton Clocking Wizard</field>
       <field name="model">hr.employee.singletonclocking</field>
@@ -45,5 +45,4 @@
               id="menu_wizard_singleton_clocking"
               parent="hr.menu_hr_root"/>
 
-  </data>       
 </odoo>
