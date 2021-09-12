@@ -33,7 +33,7 @@ class AddSingleton(models.TransientModel):
     source = fields.Char(   string="Source of the TimeStamp")
 
 
-    @api.multi
+    #@api.multi
     def button_add_clocking(self):
         self.ensure_one()
         # _logger.info( 'this is info:'+OKBLUE+ 'Button insert_timestamp works like a charm'+ENDC)
