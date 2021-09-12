@@ -30,7 +30,7 @@ class HrEmployee(models.Model):
 
     rfid_card_code = fields.Char("RFID Card Code")
 
-    @api.multi
+    #@api.multi
     def register_attendance_with_external_timestamp(self, timestamp = None):
         """ allows to register attendance with external timestamp
         """

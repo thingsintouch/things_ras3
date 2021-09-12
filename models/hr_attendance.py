@@ -53,7 +53,7 @@ class HrAttendance(models.Model):
                 })
 
 
-    @api.multi
+    #@api.multi
     def add_clocking(   self,
                         employee_id,
                         timestamp, 
