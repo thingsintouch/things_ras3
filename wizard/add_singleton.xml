@@ -7,7 +7,7 @@
       <!-- <field name="view_type">form</field> -->
       <field name="arch" type="xml">
         <form>
-          <sheet>
+          <!-- <sheet>
             <group>
               <field name="employee_id"/>
               <field name="source"/>
@@ -16,7 +16,7 @@
               <field name="clocking_to_add_or_delete" />
             </group>
           </sheet>
-          <!-- <footer>
+          <footer>
             <button type="object"
               name="button_add_clocking"
               string="Add Clocking"
