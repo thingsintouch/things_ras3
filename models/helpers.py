@@ -51,11 +51,11 @@ class attendanceHelpers():
         # _logger.debug(OKBLUE+"employee_id is:  %s "+ENDC, self.employee_id)
         # #_logger.debug(OKBLUE+"employee name is:  %s "+ENDC, self.employee_id.name)
         # _logger.debug(OKBLUE+"checkin_or_checkout is:  %s "+ENDC, self.checkin_or_checkout)
-        # _logger.debug(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC, self.timestamp)
+        # _logger.debug(OKBLUE+"clocking_to_add_or_delete is:  %s "+ENDC, self.timestamp_dt)
         pass
         
     def is_timestamp_in_the_future(self):
-        return self.timestamp > fields.Datetime.now()
+        return self.timestamp_dt > fields.Datetime.now()
 
     def is_timestamp_too_old(self):
         NOW = datetime.now()
@@ -72,7 +72,7 @@ class attendanceHelpers():
         if type_of_check not in ("check_in", "check_out"):
             type_of_check = "check_in"
         return self.attendanceModel.sudo().search([ ('employee_id', '=', self.employee_id),
-                                        ( type_of_check, '=', self.timestamp),
+                                        ( type_of_check, '=', self.timestamp_dt),
                                     ],
                                     order='check_in desc', 
                                     limit=1)
@@ -126,14 +126,14 @@ class attendanceHelpers():
                                 ('check_in', '!=', False),
                                     ]).sorted(key=lambda r: r.check_in)
         if self.attendances_check_in_sorted:
-            if self.timestamp < self.attendances_check_in_sorted[0].check_in:
+            if self.timestamp_dt < self.attendances_check_in_sorted[0].check_in:
                 self.PCI = False
                 self.NCI = self.attendances_check_in_sorted[0]
             else:                              
                 self.PCI = self.attendances_check_in_sorted[0]
                 self.NCI = False
                 for r in self.attendances_check_in_sorted:
-                    if r.check_in and r.check_in > self.timestamp:
+                    if r.check_in and r.check_in > self.timestamp_dt:
                         self.NCI = r
                     else:
                         self.PCI = r
@@ -146,14 +146,14 @@ class attendanceHelpers():
                                 ('check_out', '!=', False),
                                     ]).sorted(key=lambda r: r.check_out)
         if self.attendances_check_out_sorted:
-            if self.timestamp < self.attendances_check_out_sorted[0].check_out:
+            if self.timestamp_dt < self.attendances_check_out_sorted[0].check_out:
                 self.PCO = False
                 self.NCO = self.attendances_check_out_sorted[0]
             else:                              
                 self.PCO = self.attendances_check_out_sorted[0]
                 self.NCO = False
                 for r in self.attendances_check_out_sorted:
-                    if r.check_out and r.check_out > self.timestamp:
+                    if r.check_out and r.check_out > self.timestamp_dt:
                         self.NCO = r
                     else:
                         self.PCO = r
@@ -192,6 +192,7 @@ class attendanceHelpers():
 
     def prepare_exit_register_clocking_process(self):
         self.timestamp = None
+        self.timestamp_dt = None
         self.source = None
 
     def could_register_using_only_PCI_and_PCO(self):
@@ -208,16 +209,16 @@ class attendanceHelpers():
         def check_out_of_PCI_has_to_be_relocated_in_next_iteration():
             self.temp_timestamp         = self.PCI.check_out
             self.temp_source            = self.PCI.check_out_source
-            self.PCI.check_out          = self.timestamp
+            self.PCI.check_out          = self.timestamp_dt
             self.PCI.check_out_source   = self.source
-            self.timestamp              = self.temp_timestamp
+            self.timestamp_dt              = self.temp_timestamp
             self.source                 = self.temp_source
         def insert_checkout():
-            self.PCI.check_out          = self.timestamp
+            self.PCI.check_out          = self.timestamp_dt
             self.PCI.check_out_source   = self.source
             self.prepare_exit_register_clocking_process()             
  
-        if  self.maxAllowedWorkingHoursNotReached(self.timestamp, self.PCI.check_in):
+        if  self.maxAllowedWorkingHoursNotReached(self.timestamp_dt, self.PCI.check_in):
             #_logger.debug(OKCYAN+"self.PCI.check_out: "+ENDC, self.PCI.check_out)
             if self.PCI.check_out:
                 check_out_of_PCI_has_to_be_relocated_in_next_iteration()
@@ -231,7 +232,7 @@ class attendanceHelpers():
         def move_new_timestamp_to_CI_and_old_CI_to_CO():
             self.temp_timestamp         = self.NCI.check_in
             self.temp_source            = self.NCI.check_in_source
-            self.NCI.check_in           = self.timestamp
+            self.NCI.check_in           = self.timestamp_dt
             self.NCI.check_in_source    = self.source
             self.NCI.check_out          = self.temp_timestamp
             self.NCI.check_out_source   = self.temp_source
@@ -242,25 +243,25 @@ class attendanceHelpers():
                 self.to_relocate__timestamp = self.NCI.check_out
                 self.to_relocate__source    =  self.NCI.check_out_source
                 move_new_timestamp_to_CI_and_old_CI_to_CO()
-                self.timestamp              = self.to_relocate__timestamp
+                self.timestamp_dt              = self.to_relocate__timestamp
                 self.source                 = self.to_relocate__source                 
             else:
                 move_new_timestamp_to_CI_and_old_CI_to_CO()    
                 self.prepare_exit_register_clocking_process()
 
-        #_logger.debug("self.NCI.check_in: {}-  self.timestamp: {}".format(self.NCI.check_in, self.timestamp))
-        if  self.maxAllowedWorkingHoursNotReached(self.NCI.check_in, self.timestamp):
+        #_logger.debug("self.NCI.check_in: {}-  self.timestamp_dt: {}".format(self.NCI.check_in, self.timestamp_dt))
+        if  self.maxAllowedWorkingHoursNotReached(self.NCI.check_in, self.timestamp_dt):
             move_check_in_of_NCI_to_the_check_out()
             return True
         return False
 
     def register_new_Timestamp_in_existing_NCO_Attendance_Record_as_CheckIn(self):
         def register_timestamp_as_check_in_in_existing_NCO():
-            self.NCO.check_in           = self.timestamp
+            self.NCO.check_in           = self.timestamp_dt
             self.NCO.check_in_source    = self.source
             self.prepare_exit_register_clocking_process()             
  
-        if  self.maxAllowedWorkingHoursNotReached(self.NCO.check_out, self.timestamp):
+        if  self.maxAllowedWorkingHoursNotReached(self.NCO.check_out, self.timestamp_dt):
             register_timestamp_as_check_in_in_existing_NCO()
             return True
         return False
@@ -268,7 +269,7 @@ class attendanceHelpers():
     def register_CheckIn_creating_a_new_Attendance_Record(self):
         vals = {
                 'employee_id': self.employee_id,
-                'check_in': self.timestamp,
+                'check_in': self.timestamp_dt,
                 'check_in_source': self.source
             }
         newAttendance = self.attendanceModel.sudo().create(vals)
@@ -278,12 +279,12 @@ class attendanceHelpers():
         def register_and_NCI_NCO_check_out_has_to_be_relocated_in_next_iteration():
             self.temp_timestamp         = self.NCI.check_out
             self.temp_source            = self.NCI.check_out_source
-            self.NCI.check_out          = self.timestamp
+            self.NCI.check_out          = self.timestamp_dt
             self.NCI.check_out_source   = self.source
-            self.timestamp              = self.temp_timestamp
+            self.timestamp_dt              = self.temp_timestamp
             self.source                 = self.temp_source             
  
-        if  self.maxAllowedWorkingHoursNotReached(self.timestamp, self.NCI.check_in):
+        if  self.maxAllowedWorkingHoursNotReached(self.timestamp_dt, self.NCI.check_in):
             register_and_NCI_NCO_check_out_has_to_be_relocated_in_next_iteration()             
             return True
         return False
