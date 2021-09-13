@@ -3,18 +3,18 @@ from odoo import api, exceptions, fields, models
 import logging
 _logger = logging.getLogger(__name__)
 
-HEADER = '\033[95m'
-OKBLUE = '\033[94m'
-OKCYAN = '\033[96m'
-OKGREEN = '\033[92m'
-WARNING = '\033[93m'
-FAIL = '\033[91m'
-ENDC = '\033[0m'
-BOLD = '\033[1m'
-UNDERLINE = '\033[4m'
+# HEADER = '\033[95m'
+# OKBLUE = '\033[94m'
+# OKCYAN = '\033[96m'
+# OKGREEN = '\033[92m'
+# WARNING = '\033[93m'
+# FAIL = '\033[91m'
+# ENDC = '\033[0m'
+# BOLD = '\033[1m'
+# UNDERLINE = '\033[4m'
 
 class AddSingleton(models.TransientModel):
-    _name = 'hr.employee.singletonclocking'
+    _name = 'hr.singletonclocking.wizard'
     _description = 'Add or Delete a Singleton Clocking'
 
     clocking_to_add_or_delete = fields.Datetime(
@@ -29,7 +29,10 @@ class AddSingleton(models.TransientModel):
     # add_timestamp =fields.Boolean(
     #     string="true if add, false if delete", 
     #     default="True")    
-    employee_id = fields.Many2one('hr.employee', string="Employee")
+    employee_id = fields.Many2one(
+        'hr.employee', string='Employee', required=True,
+        default=lambda self: self.env.context.get('active_id', None),
+    )
     source = fields.Char(   string="Source of the TimeStamp")
 
 
@@ -68,7 +71,7 @@ class AddSingleton(models.TransientModel):
         return True
 
 
-    # @api.multi
+    # #@api.multi
     # def button_delete_clocking(self):
     #     self.ensure_one()
     #     _logger.info( 'this is info:'+WARNING+ 'Button DELETE_timestamp works like a charm'+ENDC)

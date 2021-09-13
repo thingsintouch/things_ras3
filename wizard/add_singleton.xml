@@ -3,11 +3,10 @@
 
     <record id="view_form_singleton_clocking" model="ir.ui.view">
       <field name="name">Add Singleton Clocking Wizard</field>
-      <field name="model">hr.employee.singletonclocking</field>
-      <!-- <field name="view_type">form</field> -->
+      <field name="model">hr.singletonclocking.wizard</field>
       <field name="arch" type="xml">
         <form>
-          <!-- <sheet>
+          <sheet>
             <group>
               <field name="employee_id"/>
               <field name="source"/>
@@ -25,22 +24,20 @@
             <button special="cancel"
               string="Cancel"
               class="btn-default" />
-          </footer> -->
+          </footer>
         </form>
       </field>
     </record>
 
     <act_window id="action_singleton_clocking"
       name="Singleton Clocking"
-      src_model="hr.employee"
-      res_model="hr.employee.singletonclocking"
-      view_type="form"
+      res_model="hr.singletonclocking.wizard"
       view_mode="form"
       target="new"
       />
 
     <menuitem
-      parent="hr.menu_hr_root"
+      parent="menu_hr_root"
       id="menu_wizard_singleton_clocking"
       action="action_singleton_clocking"
     />
