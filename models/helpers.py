@@ -31,7 +31,10 @@ class attendanceHelpers():
         self.attendanceModel = attendanceModel
         self.employee_id = employee_id
         self.timestamp = timestamp
-        self.timestamp_dt = datetime.strptime(timestamp, DATETIME_FORMAT)
+        if  isinstance(self.timestamp, datetime.datetime):
+            self.timestamp_dt = self.timestamp
+        else:
+            self.timestamp_dt = datetime.strptime(timestamp, DATETIME_FORMAT)
         #self.checkin_or_checkout = checkin_or_checkout
         self.source = source or defaultClockingSource # in which device RAS2 (for example) was the clocking issued
         self.howManyDaysAllowedToChange = howManyDaysAllowedToChange
