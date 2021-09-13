@@ -327,8 +327,17 @@ class attendanceHelpers():
     def maxAllowedWorkingHoursNotReached(self, timestamp_1, timestamp_2):
         if not timestamp_1 or not timestamp_2:
             return True
-        timestamp_1_dt = datetime.strptime(timestamp_1, DATETIME_FORMAT)
-        timestamp_2_dt = datetime.strptime(timestamp_2, DATETIME_FORMAT)
+
+        if  isinstance(timestamp_1, datetime):
+            timestamp_1_dt = timestamp_1
+        else:
+            timestamp_1_dt = datetime.strptime(timestamp_1, DATETIME_FORMAT)
+
+        if  isinstance(timestamp_2, datetime):
+            timestamp_2_dt = timestamp_2
+        else:
+            timestamp_2_dt = datetime.strptime(timestamp_2, DATETIME_FORMAT)
+
         differenceInHours = abs(timestamp_1_dt - timestamp_2_dt).total_seconds()/3600
         #_logger.debug(OKCYAN+"delta is:  %s "+ENDC, differenceInHours)
         return  (differenceInHours < self.maxAllowedWorkingHours)
