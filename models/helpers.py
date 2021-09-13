@@ -31,7 +31,7 @@ class attendanceHelpers():
         self.attendanceModel = attendanceModel
         self.employee_id = employee_id
         self.timestamp = timestamp
-        if  isinstance(self.timestamp, datetime.datetime):
+        if  isinstance(self.timestamp, datetime):
             self.timestamp_dt = self.timestamp
         else:
             self.timestamp_dt = datetime.strptime(timestamp, DATETIME_FORMAT)
