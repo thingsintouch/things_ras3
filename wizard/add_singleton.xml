@@ -37,9 +37,9 @@
       />
 
     <menuitem
-      parent="things_menu_root"
+      parent="things_gateway.things_menu_root"
       id="menu_wizard_singleton_clocking"
-      groups="things_ras_group_user"
+      groups="things_gateway.things_ras_group_user"
       action="action_singleton_clocking"
     />
 
