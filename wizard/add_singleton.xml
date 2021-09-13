@@ -37,7 +37,7 @@
       />
 
     <menuitem
-      parent="menu_hr_root"
+      parent="things_menu_root"
       id="menu_wizard_singleton_clocking"
       action="action_singleton_clocking"
     />
