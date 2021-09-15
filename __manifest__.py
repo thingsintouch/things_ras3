@@ -24,6 +24,7 @@
         'things_gateway',
     ],
     'data': [
+        'security/things_ras3_security.xml',
         'security/ir.model.access.csv',
         'views/hr_employee_view.xml',
         'wizard/add_singleton.xml',

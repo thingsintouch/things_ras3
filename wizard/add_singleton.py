@@ -67,7 +67,7 @@ class AddSingleton(models.TransientModel):
         if result != "all OK":
             raise exceptions.ValidationError(result)
 
-        _logger.debug(OKBLUE+"result:  %s "+ENDC, result)
+        #_logger.debug(OKBLUE+"result:  %s "+ENDC, result)
         return True
 
 
