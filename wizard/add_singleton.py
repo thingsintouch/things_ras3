@@ -58,8 +58,8 @@ class AddSingleton(models.TransientModel):
 
         result = attendanceModel.add_clocking(  self.employee_id,
                                                 self.clocking_to_add_or_delete,
-                                                #self.checkin_or_checkout,
-                                                self.source)
+                                                from_RAS=False,
+                                                source=self.source)
 
         if result != "all OK":
             raise exceptions.ValidationError(result)

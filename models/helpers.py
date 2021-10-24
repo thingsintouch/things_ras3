@@ -25,19 +25,19 @@ class attendanceHelpers():
     def __init__(self,  attendanceModel,
                         employee_id, 
                         timestamp, 
-                        #checkin_or_checkout, 
+                        from_RAS, 
                         source):
 
         self.attendanceModel = attendanceModel
         self.employee_id = employee_id
         self.timestamp = timestamp
         self.timestamp_dt = datetime.strptime(timestamp, DATETIME_FORMAT)
-        #self.checkin_or_checkout = checkin_or_checkout
         self.source = source or defaultClockingSource # in which device RAS2 (for example) was the clocking issued
         self.howManyDaysAllowedToChange = howManyDaysAllowedToChange
         self.warningMessage = None
         self.defaultClockingSource = defaultClockingSource
         self.maxAllowedWorkingHours = maxAllowedWorkingHours
+        self.from_RAS = from_RAS or False
 
         #self.logging_at_the_beginning()
         if self.are_input_parameters_valid():
@@ -60,12 +60,6 @@ class attendanceHelpers():
     def is_timestamp_too_old(self):
         NOW = datetime.now()
         self.cutting_date_dt = NOW - relativedelta(days=self.howManyDaysAllowedToChange)
-
-        #self.cutting_date = datetime.strptime(datetime.now().strftime(DATETIME_FORMAT), '%Y-%m-%d') - relativedelta(days=self.howManyDaysAllowedToChange)
-        
-        # self.cutting_date = self.timestamp.fromtimestamp(
-        #                     time.time()-(self.howManyDaysAllowedToChange*24*60*60))
-
         return self.timestamp_dt < self.cutting_date_dt
 
     def is_timestamp_already_registered(self, type_of_check):
@@ -83,15 +77,7 @@ class attendanceHelpers():
         #     return True
         return False
 
-    # def is_checkin_or_checkout_variable_not_valid(self):
-    #     return self.checkin_or_checkout not in ["check_in", "check_out", "not_defined"]
-
-    def are_input_parameters_valid(self):
-
-        # if self.is_checkin_or_checkout_variable_not_valid():
-        #     self.warningMessage =  "Could not add the clocking.\n"+ \
-        #             "Please specify Check-In or Check-Out Input in a valid format." 
-        #     return False           
+    def are_input_parameters_valid(self):       
 
         if self.is_clocking_source_not_valid():
             self.warningMessage =  "Could not add the clocking.\n"+ \
@@ -193,6 +179,7 @@ class attendanceHelpers():
     def prepare_exit_register_clocking_process(self):
         self.timestamp = None
         self.source = None
+        self.from_RAS = None
 
     def could_register_using_only_PCI_and_PCO(self):
         if self.PCI_exists and not self.PCO_exists:
@@ -204,17 +191,21 @@ class attendanceHelpers():
                     return True
         return False
 
-    def register_new_Timestamp_in_existing_PCI_Attendance_Record_as_CheckOut(self):
+    def register_new_Timestamp_in_existing_PCI_Attendance_Record_as_CheckOut(self):##################################
         def check_out_of_PCI_has_to_be_relocated_in_next_iteration():
             self.temp_timestamp         = self.PCI.check_out
             self.temp_source            = self.PCI.check_out_source
+            self.temp_from_RAS          = self.PCI.check_out_with_RAS
             self.PCI.check_out          = self.timestamp
             self.PCI.check_out_source   = self.source
+            self.PCI.check_out_with_RAS = self.from_RAS
             self.timestamp              = self.temp_timestamp
             self.source                 = self.temp_source
+            self.from_RAS               = self.temp_from_RAS
         def insert_checkout():
             self.PCI.check_out          = self.timestamp
             self.PCI.check_out_source   = self.source
+            self.PCI.check_out_with_RAS = self.from_RAS
             self.prepare_exit_register_clocking_process()             
  
         if  self.maxAllowedWorkingHoursNotReached(self.timestamp, self.PCI.check_in):
@@ -228,22 +219,27 @@ class attendanceHelpers():
 
     def register_new_Timestamp_in_existing_NCI_Attendance_Record_as_CheckIn(self):
 
-        def move_new_timestamp_to_CI_and_old_CI_to_CO():
+        def move_new_timestamp_to_CI_and_old_CI_to_CO():###################################
             self.temp_timestamp         = self.NCI.check_in
             self.temp_source            = self.NCI.check_in_source
+            self.temp_from_RAS          = self.NCI.check_in_with_RAS
             self.NCI.check_in           = self.timestamp
             self.NCI.check_in_source    = self.source
+            self.NCI.check_in_with_RAS  = self.from_RAS
             self.NCI.check_out          = self.temp_timestamp
             self.NCI.check_out_source   = self.temp_source
+            self.NCI.check_out_with_RAS = self.temp_from_RAS
 
         def move_check_in_of_NCI_to_the_check_out():
             #_logger.debug(OKCYAN+"in move_check_in_of_NCI_to_the_check_out()"+ENDC)
             if self.NCI.check_out:
                 self.to_relocate__timestamp = self.NCI.check_out
                 self.to_relocate__source    =  self.NCI.check_out_source
+                self.to_relocate__from_RAS  = self.NCI.check_out_with_RAS
                 move_new_timestamp_to_CI_and_old_CI_to_CO()
                 self.timestamp              = self.to_relocate__timestamp
-                self.source                 = self.to_relocate__source                 
+                self.source                 = self.to_relocate__source
+                self.from_RAS               = self.to_relocate__from_RAS                 
             else:
                 move_new_timestamp_to_CI_and_old_CI_to_CO()    
                 self.prepare_exit_register_clocking_process()
@@ -258,6 +254,7 @@ class attendanceHelpers():
         def register_timestamp_as_check_in_in_existing_NCO():
             self.NCO.check_in           = self.timestamp
             self.NCO.check_in_source    = self.source
+            self.NCO.check_in_with_RAS  = self.from_RAS
             self.prepare_exit_register_clocking_process()             
  
         if  self.maxAllowedWorkingHoursNotReached(self.NCO.check_out, self.timestamp):
@@ -269,7 +266,8 @@ class attendanceHelpers():
         vals = {
                 'employee_id': self.employee_id,
                 'check_in': self.timestamp,
-                'check_in_source': self.source
+                'check_in_source': self.source,
+                'check_in_with_RAS': self.from_RAS
             }
         newAttendance = self.attendanceModel.sudo().create(vals)
         self.prepare_exit_register_clocking_process()
@@ -278,11 +276,13 @@ class attendanceHelpers():
         def register_and_NCI_NCO_check_out_has_to_be_relocated_in_next_iteration():
             self.temp_timestamp         = self.NCI.check_out
             self.temp_source            = self.NCI.check_out_source
+            self.temp_from_RAS          = self.NCI.check_out_with_RAS            
             self.NCI.check_out          = self.timestamp
             self.NCI.check_out_source   = self.source
+            self.NCI.check_out_with_RAS = self.from_RAS
             self.timestamp              = self.temp_timestamp
-            self.source                 = self.temp_source             
- 
+            self.source                 = self.temp_source
+            self.from_RAS               = self.temp_from_RAS
         if  self.maxAllowedWorkingHoursNotReached(self.timestamp, self.NCI.check_in):
             register_and_NCI_NCO_check_out_has_to_be_relocated_in_next_iteration()             
             return True

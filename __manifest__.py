@@ -7,9 +7,9 @@
     'description': """Manage your Attendances using a RFID Attendance Terminal RAS3.
         """,
 
-    'version': '11.0.5.0.210910',
+    'version': '10.0.5.0.211027',
     'category': 'Things',
-    'website': 'https://github.com/thingsintouch/things_attendance/tree/12.0',
+    'website': 'https://github.com/thingsintouch/things_ras3/tree/10.0',
     'author': 'thingsintouch.com',
     'license': 'AGPL-3',
     'application': False,
@@ -20,6 +20,7 @@
     ],
     'data': [
         'views/hr_employee_view.xml',
+        'views/hr_attendance_view.xml',
         'wizard/add_singleton.xml',
         'views/res_config_settings_views.xml',
     ],
