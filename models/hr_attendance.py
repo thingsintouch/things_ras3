@@ -24,12 +24,18 @@ class HrAttendance(models.Model):
     _inherit = "hr.attendance"
 
 
-    check_in_source = fields.Char(  string="Source of the Check-In TimeStamp", 
+    check_in_source = fields.Char( string="Source of the Check-In TimeStamp", 
                                     default=h.defaultClockingSource, 
                                     required=True)
     check_out_source = fields.Char( string="Source of the Check-Out TimeStamp", 
                                     default=h.defaultClockingSource,
                                     required=True)
+    check_in_with_RAS = fields.Boolean( string="Used an RFID Attendance Terminal to check-in?",
+                                        default=False,
+                                        required=True)
+    check_out_with_RAS = fields.Boolean( string="Used an RFID Attendance Terminal to check-out?",
+                                        default=False,
+                                        required=True)
 
     @api.constrains('check_in', 'check_out', 'employee_id')
     def _check_validity(self):
@@ -57,7 +63,7 @@ class HrAttendance(models.Model):
     def add_clocking(   self,
                         employee_id,
                         timestamp, 
-                        #checkin_or_checkout="not_defined", 
+                        from_RAS=False, 
                         source=h.defaultClockingSource):
         # _logger.info(OKBLUE+"self.context is:  %s "+ENDC, self.env.context)
         # _logger.info(OKBLUE+"employee_id is:  %s "+ENDC, employee_id)
@@ -68,7 +74,7 @@ class HrAttendance(models.Model):
         helper = h.attendanceHelpers(self.env['hr.attendance'],
                                     employee_id.id, 
                                     timestamp, 
-                                    #checkin_or_checkout, 
+                                    from_RAS, 
                                     source)
 
         if helper.warningMessage: return helper.warningMessage

@@ -9,9 +9,9 @@
     'description': """Manage your Attendances using a RFID Attendance Terminal RAS3.
         """,
 
-    'version': '11.0.5.0.210910',
+    'version': '14.0.5.0.211101',
     'category': 'Things',
-    'website': 'https://github.com/thingsintouch/things_attendance/tree/12.0',
+    'website': 'https://github.com/thingsintouch/things_attendance/tree/14.0',
     'author': 'Comunitea,'
               'Eficent,'
               'Odoo Community Association (OCA)'
@@ -27,6 +27,7 @@
         'security/things_ras3_security.xml',
         'security/ir.model.access.csv',
         'views/hr_employee_view.xml',
+        'views/hr_attendance_view.xml',
         'wizard/add_singleton.xml',
         'views/res_config_settings_views.xml',
     ],
