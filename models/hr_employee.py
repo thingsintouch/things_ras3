@@ -22,13 +22,13 @@ UNDERLINE = '\033[4m'
 class HrEmployee(models.Model):
 
     _inherit = "hr.employee"
-    _sql_constraints = [(
-        'rfid_card_code_uniq',
-        'UNIQUE(rfid_card_code)',
-        'The rfid code should be unique.'
-    )]
+    # _sql_constraints = [(
+    #     'rfid_card_code_uniq',
+    #     'UNIQUE(rfid_card_code)',
+    #     'The rfid code should be unique.'
+    # )]
 
-    rfid_card_code = fields.Char("RFID Card Code")
+    #rfid_card_code = fields.Char("RFID Card Code")
 
     #@api.multi
     def register_attendance_with_external_timestamp(self, timestamp = None):

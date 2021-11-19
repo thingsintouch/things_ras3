@@ -11,7 +11,7 @@
             </field>
             <field name="check_out" position="before">
                 <field name="check_out_with_RAS" invisible="1"/>
-                <button icon="fa-asterisk" attrs="{'invisible': ['|',('check_out_with_RAS', '=', True),('check_out', '==', False)]}"/>
+                <button name="is_non_rfid" icon="fa-asterisk" attrs="{'invisible': ['|',('check_out_with_RAS', '=', True),('check_out', '==', False)]}"/>
             </field>
             <!-- <xpath expr="//tree" position="attributes">
                 <attribute name="decoration-danger">check_in_with_RAS == False or check_out_with_RAS == False</attribute>
